@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>BipMatch! · Conexões Reais</title>
+  <!-- Fonte Open Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Open Sans', sans-serif;
+      background: linear-gradient(145deg, #ffe9db 0%, #ffd9e8 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 12px;
+      margin: 0;
+      transition: background 0.3s;
+    }
+
+    /* Tema escuro */
+    body.dark-mode {
+      background: #1a1e2b;
+    }
+    body.dark-mode .phone-frame {
+      background: #252b3d;
+      border-color: #3f4a5e;
+    }
+    body.dark-mode .app-header,
+    body.dark-mode .bottom-nav,
+    body.dark-mode .main-content {
+      background: #252b3d;
+      color: #ede7e0;
+      border-color: #3a4357;
+    }
+    body.dark-mode .mission-card,
+    body.dark-mode .event-slide,
+    body.dark-mode .chat-row,
+    body.dark-mode .bio-card {
+      background: #2f3a4c;
+      border-color: #4a5a70;
+      color: #f0e6dc;
+    }
+    body.dark-mode .points-badge {
+      background: #3a2e28;
+      border-color: #8b6f58;
+      color: #f7c9a4;
+    }
+    body.dark-mode .nav-item,
+    body.dark-mode .nav-item i {
+      color: #b9b1a6;
+    }
+    body.dark-mode .nav-item.active,
+    body.dark-mode .nav-item.active i {
+      color: #ffac6c;
+    }
+
+    .phone-frame {
+      max-width: 380px;
+      width: 100%;
+      height: 780px;
+      background: #ffffff;
+      border-radius: 44px;
+      box-shadow: 0 30px 50px rgba(220, 100, 100, 0.15), 0 10px 20px rgba(0,0,0,0.05);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid #ffd0c2;
+      transition: background 0.3s, border 0.3s;
+    }
+
+    .app-header {
+      padding: 18px 18px 10px;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #ffded0;
+    }
+
+    .logo-img {
+      height: 42px;
+      width: auto;
+    }
+
+    .points-badge {
+      background: #fce6d4;
+      padding: 8px 16px;
+      border-radius: 40px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid #ffbe9a;
+      color: #b34f1a;
+      font-weight: 600;
+      transition: transform 0.2s;
+    }
+    .points-badge.pop {
+      transform: scale(1.2);
+    }
+
+    .main-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 18px 16px 12px;
+      background: #fefaf7;
+      scroll-behavior: smooth;
+    }
+
+    .bottom-nav {
+      background: white;
+      padding: 10px 8px 20px;
+      display: flex;
+      justify-content: space-around;
+      border-top: 1px solid #fad5c4;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: none;
+      border: none;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 0.7rem;
+      color: #b29582;
+      cursor: pointer;
+      padding: 6px 0;
+      border-radius: 30px;
+      transition: all 0.15s;
+      flex: 1;
+    }
+    .nav-item i { font-size: 1.4rem; color: #b29582; }
+    .nav-item.active { color: #e06b2b; }
+    .nav-item.active i { color: #e06b2b; }
+    .nav-item:active { transform: scale(0.94); }
+
+    .screen { display: none; }
+    .screen.active-screen { display: block; }
+
+    /* Cards */
+    .mission-card {
+      background: white;
+      border-radius: 24px;
+      padding: 16px;
+      margin-bottom: 14px;
+      box-shadow: 0 8px 16px -6px #fbcbb6;
+      border: 1px solid #ffe1d2;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.2s;
+    }
+    .mission-card:active { transform: scale(0.99); }
+
+    .mission-btn {
+      background: #fee0ce;
+      border: none;
+      border-radius: 40px;
+      padding: 10px 18px;
+      font-weight: 600;
+      color: #a3491a;
+      cursor: pointer;
+      border: 1px solid #febe9a;
+      transition: 0.15s;
+    }
+    .mission-btn:active { background: #f8c7aa; }
+    .mission-btn.completed {
+      background: #d6cbc4;
+      color: #655a52;
+      pointer-events: none;
+    }
+
+    /* Mapa + pop-up */
+    .map-wrapper {
+      position: relative;
+      border-radius: 32px;
+      overflow: hidden;
+      margin: 16px 0;
+    }
+    .map-iframe {
+      width: 100%;
+      height: 240px;
+      border: 0;
+    }
+    .map-marker {
+      position: absolute;
+      width: 32px;
+      height: 32px;
+      background: #ff8a5c;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      cursor: pointer;
+      transition: 0.2s;
+      border: 2px solid white;
+    }
+    .map-marker:hover { transform: scale(1.1); }
+    .profile-popup {
+      position: absolute;
+      background: white;
+      border-radius: 20px;
+      padding: 12px 16px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+      z-index: 10;
+      width: 200px;
+      display: none;
+    }
+
+    /* Animações */
+    @keyframes pop-in {
+      0% { transform: scale(0.8); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .animate-pop { animation: pop-in 0.2s ease-out; }
+
+    /* Cores adicionais */
+    .accent-pink { color: #d44c7a; }
+    .accent-purple { color: #8a5eb8; }
+    .bg-soft-green { background: #d4eed7; }
+
+    /* Filtros modal */
+    .filter-modal {
+      background: white;
+      border-radius: 32px;
+      padding: 20px;
+      margin: 20px 0;
+      box-shadow: 0 20px 30px rgba(0,0,0,0.1);
+    }
+    body.dark-mode .filter-modal { background: #2f3a4c; }
+  </style>
+</head>
+<body>
+<div class="phone-frame">
+  <!-- Cabeçalho -->
+  <div class="app-header">
+    <div class="logo-area">
+      <img src="logo.png" alt="BipMatch" class="logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div style="display: none; align-items: center; gap:6px; font-weight:800; font-size:1.3rem; color:#462e20;">
+        <span>BIPMATCH</span><span style="font-size:0.7rem; margin-left:4px; color:#b45f2e;">CONEXÕES REAIS</span>
+      </div>
+    </div>
+    <div class="points-badge" id="globalPointsDisplay">
+      <i class="fas fa-star"></i>
+      <span id="userTotalPoints">230</span>
+    </div>
+  </div>
+
+  <!-- Conteúdo principal -->
+  <div class="main-content" id="mainContent">
+    <!-- HOME SCREEN -->
+    <div id="homeScreen" class="screen active-screen">
+      <div style="display:flex; justify-content:space-between;">
+        <h3>🔥 Missões diárias</h3>
+        <i class="fas fa-sliders-h" id="filterIcon" style="font-size:1.4rem; color:#d15e2e; cursor:pointer;"></i>
+      </div>
+      <div id="missionsContainer"></div>
+      <!-- Recomendações extras -->
+      <div class="section-title"><h3>✨ Pessoas perto de você</h3></div>
+      <div id="recommendationsContainer"></div>
+      <!-- Área de filtros (escondida) -->
+      <div id="filterPanel" class="filter-modal" style="display:none;"></div>
+    </div>
+
+    <!-- PERFIL SCREEN -->
+    <div id="profileScreen" class="screen">
+      <div style="display:flex; align-items:center; gap:16px; margin-bottom:24px;">
+        <div style="width:80px; height:80px; background:linear-gradient(145deg, #febc8d, #f78e5e); border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-size:40px;"><i class="fas fa-user-circle"></i></div>
+        <div><h2>Helena</h2><p>Alphaville, Barueri</p></div>
+        <i class="fas fa-pen" style="margin-left:auto; color:#c96d3a;"></i>
+      </div>
+      <div style="display:flex; gap:24px; margin:10px 0;">
+        <div><span style="font-weight:700; font-size:1.3rem;" id="profilePoints">230</span> pts</div>
+        <div><span style="font-weight:700;">8</span> missões</div>
+      </div>
+      <div class="bio-card" style="background:white; border-radius:24px; padding:18px; border:1px solid #ffd5c0;">
+        <p>📝 Apaixonada por livros, cultura coreana e boa comida.</p>
+      </div>
+      <!-- Toggle tema escuro -->
+      <div style="margin: 20px 0; display:flex; align-items:center; gap:12px;">
+        <i class="fas fa-moon"></i>
+        <span>Tema escuro</span>
+        <label class="switch">
+          <input type="checkbox" id="darkModeToggle"> 
+          <span class="slider round"></span>
+        </label>
+      </div>
+      <h4>🏅 Histórico</h4>
+      <ul id="missionHistoryLog" style="list-style:none;"></ul>
+    </div>
+
+    <!-- LOCAIS SCREEN -->
+    <div id="placesScreen" class="screen">
+      <h3>🍕 Parceiros</h3>
+      <div style="background:white; border-radius:28px; padding:16px; margin-bottom:16px;"><strong>Larezzo Pizzaria</strong><p>Barueri · 4.1★</p></div>
+      <div style="background:white; border-radius:28px; padding:16px; margin-bottom:16px;"><strong>Parque Dom José</strong><p>Barueri · 4.5★</p></div>
+      <h4>🎉 Eventos</h4>
+      <div style="display:flex; gap:14px; overflow-x:auto; padding-bottom:12px;">
+        <div style="min-width:180px; background:#ffe8f0; border-radius:28px; padding:16px;"><i class="fas fa-music"></i> Rock in Rio<p>5000 pts = desconto casal</p></div>
+        <div style="min-width:180px; background:#e5f0fa; border-radius:28px; padding:16px;"><i class="fas fa-book"></i> Bienal<p>3000 pts = ingresso extra</p></div>
+        <div style="min-width:180px; background:#fef0d9; border-radius:28px; padding:16px;"><i class="fas fa-drumstick-bite"></i> Feira Coreana<p>2000 pts = brinde</p></div>
+      </div>
+    </div>
+
+    <!-- CHAT SCREEN -->
+    <div id="chatScreen" class="screen">
+      <h3>💬 Conversas</h3>
+      <div id="chatListContainer"></div>
+      <div id="chatDetailPanel" style="display:none;"></div>
+    </div>
+
+    <!-- MAPA SCREEN -->
+    <div id="mapScreen" class="screen">
+      <h3>🗺️ Barueri - pessoas próximas</h3>
+      <div class="map-wrapper" id="mapWrapper">
+        <iframe class="map-iframe" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d58528.26849483853!2d-46.91790647910156!3d-23.50853129999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94cf03c6a1b7f5b1%3A0x1e8b9c6e6a6b6f1!2sBarueri%2C%20SP!5e0!3m2!1spt-BR!2sbr!4v1710000000000" allowfullscreen="" loading="lazy"></iframe>
+        <!-- Marcadores simulados -->
+        <div class="map-marker" style="top:40%; left:30%;" data-user="Mariana"><i class="fas fa-user"></i></div>
+        <div class="map-marker" style="top:60%; left:55%;" data-user="Pedro"><i class="fas fa-user"></i></div>
+        <div class="map-marker" style="top:25%; left:70%;" data-user="Júlia"><i class="fas fa-user"></i></div>
+        <div id="popupProfile" class="profile-popup"></div>
+      </div>
+      <p style="margin-top:8px;">Toque nos ícones para ver o perfil.</p>
+    </div>
+  </div>
+
+  <!-- Barra inferior -->
+  <div class="bottom-nav">
+    <button class="nav-item active" data-screen="home"><i class="fas fa-home"></i><span>Home</span></button>
+    <button class="nav-item" data-screen="profile"><i class="fas fa-user"></i><span>Perfil</span></button>
+    <button class="nav-item" data-screen="places"><i class="fas fa-map-pin"></i><span>Locais</span></button>
+    <button class="nav-item" data-screen="chat"><i class="fas fa-comment"></i><span>Chat</span></button>
+    <button class="nav-item" data-screen="map"><i class="fas fa-map"></i><span>Mapa</span></button>
+  </div>
+</div>
+
+<script>
+  (function(){
+    // Estado
+    let userPoints = 230;
+    const missions = [
+      { id: 1, title: 'Fale com alguém no chat', desc: '+20 pontos', icon: 'fa-comment-dots', points: 20, completed: false },
+      { id: 2, title: 'Curta o perfil de um usuário', desc: '+10 pontos', icon: 'fa-heart', points: 10, completed: true }
+    ];
+    const chats = [
+      { name: 'Marina', lastMsg: 'Vamos na Larezzo? 🍕', messages: ['Oi!', 'Bora na pizzaria hoje?'] },
+      { name: 'Pedro', lastMsg: 'Adorei o parque! 🌳', messages: ['O parque estava lindo', 'Vamos repetir?'] },
+      { name: 'Bia', lastMsg: 'Missão concluída ✅', messages: ['Ganhei +10 pontos!', 'E você?'] }
+    ];
+    const recommendations = [
+      { name: 'Amanda', age: 27, icon: 'fa-user-circle' },
+      { name: 'Rafael', age: 30, icon: 'fa-user-circle' },
+      { name: 'Sofia', age: 24, icon: 'fa-user-circle' }
+    ];
+
+    // Elementos
+    const screens = {
+      home: document.getElementById('homeScreen'),
+      profile: document.getElementById('profileScreen'),
+      places: document.getElementById('placesScreen'),
+      chat: document.getElementById('chatScreen'),
+      map: document.getElementById('mapScreen')
+    };
+    const navItems = document.querySelectorAll('.nav-item');
+    const pointsSpans = {
+      global: document.getElementById('userTotalPoints'),
+      profile: document.getElementById('profilePoints')
+    };
+    const missionsContainer = document.getElementById('missionsContainer');
+    const historyLog = document.getElementById('missionHistoryLog');
+    const chatListContainer = document.getElementById('chatListContainer');
+    const chatDetail = document.getElementById('chatDetailPanel');
+    const filterIcon = document.getElementById('filterIcon');
+    const filterPanel = document.getElementById('filterPanel');
+    const recContainer = document.getElementById('recommendationsContainer');
+    const darkToggle = document.getElementById('darkModeToggle');
+    const popupProfile = document.getElementById('popupProfile');
+
+    // Atualizar UI pontos
+    function updatePointsUI(animate = true) {
+      pointsSpans.global.textContent = userPoints;
+      if(pointsSpans.profile) pointsSpans.profile.textContent = userPoints;
+      if(animate) {
+        const badge = document.querySelector('.points-badge');
+        badge.classList.add('pop');
+        setTimeout(() => badge.classList.remove('pop'), 200);
+      }
+    }
+
+    // Missões
+    function renderMissions() {
+      missionsContainer.innerHTML = missions.map(m => `
+        <div class="mission-card">
+          <div style="display:flex; align-items:center; gap:16px;">
+            <div style="width:48px; height:48px; background:#fcd9c1; border-radius:16px; display:flex; align-items:center; justify-content:center; color:#b44d1e;"><i class="fas ${m.icon}"></i></div>
+            <div><h4>${m.title}</h4><p>${m.desc}</p></div>
+          </div>
+          <button class="mission-btn ${m.completed ? 'completed' : ''}" data-id="${m.id}">${m.completed ? 'Concluída' : 'Concluir'}</button>
+        </div>
+      `).join('');
+      document.querySelectorAll('.mission-btn[data-id]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const id = parseInt(btn.dataset.id);
+          const mission = missions.find(m=>m.id===id);
+          if(mission && !mission.completed) {
+            mission.completed = true;
+            userPoints += mission.points;
+            updatePointsUI(true);
+            renderMissions();
+            renderHistory();
+          }
+        });
+      });
+    }
+
+    function renderHistory() {
+      const completed = missions.filter(m=>m.completed);
+      historyLog.innerHTML = completed.map(m => `<li style="padding:10px 0; border-bottom:1px solid #eccdbd;"><i class="fas ${m.icon}"></i> ${m.title} · +${m.points} pts</li>`).join('');
+    }
+
+    // Recomendações
+    function renderRecommendations() {
+      recContainer.innerHTML = recommendations.map(r => `
+        <div style="background:white; border-radius:20px; padding:14px; margin-bottom:10px; display:flex; gap:12px; align-items:center; border:1px solid #ffd8c2;">
+          <div style="width:50px; height:50px; background:#facbad; border-radius:30px; display:flex; align-items:center; justify-content:center;"><i class="fas ${r.icon}"></i></div>
+          <div><strong>${r.name}, ${r.age}</strong><p>Barueri · interesses similares</p></div>
+        </div>
+      `).join('');
+    }
+
+    // Chat
+    function renderChatList() {
+      chatListContainer.innerHTML = chats.map((c,idx) => `
+        <div class="chat-row" data-chat-index="${idx}" style="display:flex; align-items:center; gap:16px; padding:16px 8px; border-bottom:1px solid #f1d2c0; cursor:pointer;">
+          <div style="width:48px; height:48px; background:#f2c1a4; border-radius:30px; display:flex; align-items:center; justify-content:center;"><i class="fas fa-user"></i></div>
+          <div style="flex:1"><strong>${c.name}</strong><p>${c.lastMsg}</p></div>
+          <i class="fas fa-chevron-right"></i>
+        </div>
+      `).join('');
+      document.querySelectorAll('.chat-row').forEach(row => {
+        row.addEventListener('click', () => {
+          const idx = row.dataset.chatIndex;
+          const chat = chats[idx];
+          chatDetail.style.display = 'block';
+          chatDetail.innerHTML = `<div style="background:#f5e4d8; border-radius:24px; padding:16px;"><strong>${chat.name}</strong><hr>` +
+            chat.messages.map(msg => `<div style="background:white; padding:10px; border-radius:18px; margin:8px 0;">${msg}</div>`).join('') +
+            `<button id="backChat" style="margin-top:12px; background:none; border:none; color:#c05a2a;"><i class="fas fa-arrow-left"></i> Voltar</button></div>`;
+          document.getElementById('backChat').addEventListener('click', ()=> chatDetail.style.display='none');
+        });
+      });
+    }
+
+    // Filtros
+    function buildFilterPanel() {
+      filterPanel.innerHTML = `
+        <h4>Filtros</h4>
+        <p>Gênero:</p>
+        <select id="filterGender" style="padding:8px; border-radius:30px; width:100%; margin-bottom:12px;">
+          <option>Todos</option><option>Homem</option><option>Mulher</option><option>Outro</option>
+        </select>
+        <p><input type="checkbox" id="filterNearby"> Próximos a mim</p>
+        <p>Preferências:</p>
+        <select id="filterPref" style="padding:8px; border-radius:30px; width:100%; margin-bottom:16px;">
+          <option>Parecidas com as minhas</option><option>Distintas das minhas</option>
+        </select>
+        <button id="applyFilterBtn" style="background:#f39c12; border:none; border-radius:40px; padding:12px; color:white; width:100%;">Aplicar</button>
+      `;
+      document.getElementById('applyFilterBtn').addEventListener('click', ()=>{
+        alert('Filtros aplicados (simulação)');
+        filterPanel.style.display='none';
+      });
+    }
+
+    // Navegação
+    function switchScreen(screenId) {
+      Object.values(screens).forEach(s => s.classList.remove('active-screen'));
+      screens[screenId].classList.add('active-screen');
+      navItems.forEach(item => item.classList.toggle('active', item.dataset.screen === screenId));
+      document.getElementById('mainContent').scrollTop = 0;
+    }
+
+    // Eventos
+    navItems.forEach(item => item.addEventListener('click', (e) => switchScreen(item.dataset.screen)));
+    filterIcon.addEventListener('click', () => {
+      filterPanel.style.display = filterPanel.style.display === 'none' ? 'block' : 'none';
+    });
+
+    // Mapa: pop-up
+    document.querySelectorAll('.map-marker').forEach(marker => {
+      marker.addEventListener('click', (e) => {
+        const userName = marker.dataset.user;
+        popupProfile.style.display = 'block';
+        popupProfile.style.left = (marker.offsetLeft + 20) + 'px';
+        popupProfile.style.top = (marker.offsetTop - 40) + 'px';
+        popupProfile.innerHTML = `<strong>${userName}</strong><p>28 anos · Barueri</p><p>Interesses: música, livros</p><button id="closePopup">fechar</button>`;
+        document.getElementById('closePopup').addEvent
