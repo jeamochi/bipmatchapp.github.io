@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>BipMatch! · Conexões Reais</title>
+  <!-- Fonte Open Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Open Sans', sans-serif;
+      background: linear-gradient(145deg, #fce9e0 0%, #f8dbe7 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 12px;
+      margin: 0;
+      transition: background 0.3s;
+    }
+
+    /* Tema escuro */
+    body.dark-mode {
+      background: #121826;
+    }
+    body.dark-mode .phone-frame {
+      background: #1f2537;
+      border-color: #3a4660;
+    }
+    body.dark-mode .app-header,
+    body.dark-mode .bottom-nav,
+    body.dark-mode .main-content {
+      background: #1f2537;
+      color: #f0e4d8;
+      border-color: #32405a;
+    }
+    body.dark-mode .mission-card,
+    body.dark-mode .event-card,
+    body.dark-mode .chat-row,
+    body.dark-mode .bio-card,
+    body.dark-mode .filter-modal {
+      background: #2a3448;
+      border-color: #435574;
+      color: #ede0d6;
+    }
+    body.dark-mode .points-badge {
+      background: #3e3130;
+      border-color: #a56b4a;
+      color: #ffc9a2;
+    }
+    body.dark-mode .nav-item,
+    body.dark-mode .nav-item i {
+      color: #b5aa9f;
+    }
+    body.dark-mode .nav-item.active,
+    body.dark-mode .nav-item.active i {
+      color: #ffb27a;
+    }
+
+    .phone-frame {
+      max-width: 380px;
+      width: 100%;
+      height: 780px;
+      background: #ffffff;
+      border-radius: 44px;
+      box-shadow: 0 30px 45px rgba(220, 120, 100, 0.18);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid #ffcdb5;
+      transition: background 0.3s;
+    }
+
+    /* Cabeçalho com logo fiel */
+    .app-header {
+      padding: 16px 18px 10px;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #fdd7c4;
+    }
+
+    .logo-container {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+    }
+    .logo-main {
+      font-size: 1.9rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: #422c1e;
+      background: linear-gradient(135deg, #f27e3a, #e65c2e);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .logo-sub {
+      font-size: 0.55rem;
+      font-weight: 600;
+      color: #b45f2e;
+      letter-spacing: 1.2px;
+    }
+
+    .points-badge {
+      background: #feefe4;
+      padding: 8px 16px;
+      border-radius: 40px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid #ffbe99;
+      color: #b44f1a;
+      font-weight: 700;
+      transition: transform 0.2s;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.02);
+    }
+    .points-badge i { color: #f39c12; }
+    .points-badge.pop {
+      transform: scale(1.2);
+      background: #ffdcc8;
+    }
+
+    .main-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 18px 16px 12px;
+      background: #fef9f5;
+    }
+
+    /* Barra inferior */
+    .bottom-nav {
+      background: white;
+      padding: 10px 8px 20px;
+      display: flex;
+      justify-content: space-around;
+      border-top: 1px solid #fad5c4;
+    }
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: none;
+      border: none;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 0.7rem;
+      color: #b79b8b;
+      cursor: pointer;
+      padding: 6px 0;
+      border-radius: 30px;
+      transition: all 0.15s;
+      flex: 1;
+    }
+    .nav-item i { font-size: 1.4rem; color: #b79b8b; }
+    .nav-item.active { color: #e06b2b; }
+    .nav-item.active i { color: #e06b2b; }
+    .nav-item:active { transform: scale(0.94); }
+
+    .screen { display: none; }
+    .screen.active-screen { display: block; }
+
+    /* Cards e componentes */
+    .mission-card {
+      background: white;
+      border-radius: 26px;
+      padding: 16px;
+      margin-bottom: 14px;
+      box-shadow: 0 10px 18px -8px #f5c6ae;
+      border: 1px solid #ffe0d0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.2s;
+    }
+    .mission-card:active { transform: scale(0.99); }
+
+    .mission-btn {
+      background: #fee0ce;
+      border: none;
+      border-radius: 40px;
+      padding: 10px 18px;
+      font-weight: 700;
+      color: #a3491a;
+      cursor: pointer;
+      border: 1px solid #febe9a;
+      transition: 0.15s;
+    }
+    .mission-btn:active { background: #f8c7aa; }
+    .mission-btn.completed {
+      background: #d6cbc4;
+      color: #655a52;
+      pointer-events: none;
+    }
+
+    /* Filtros */
+    .filter-modal {
+      background: white;
+      border-radius: 32px;
+      padding: 20px;
+      margin: 20px 0;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.08);
+      border: 1px solid #ffd9c2;
+    }
+
+    /* Mapa */
+    .map-wrapper {
+      position: relative;
+      border-radius: 32px;
+      overflow: hidden;
+      margin: 16px 0;
+      border: 2px solid #ffcfb3;
+    }
+    .map-iframe {
+      width: 100%;
+      height: 240px;
+      border: 0;
+    }
+    .map-marker {
+      position: absolute;
+      width: 36px;
+      height: 36px;
+      background: #ff7b4a;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+      cursor: pointer;
+      border: 3px solid white;
+      transition: 0.2s;
+      font-size: 18px;
+    }
+    .map-marker:hover { transform: scale(1.15); background: #e06830; }
+    .profile-popup {
+      position: absolute;
+      background: white;
+      border-radius: 24px;
+      padding: 14px 18px;
+      box-shadow: 0 20px 30px rgba(0,0,0,0.2);
+      z-index: 20;
+      width: 210px;
+      display: none;
+      border: 1px solid #ffb28b;
+      animation: pop-in 0.2s;
+    }
+    body.dark-mode .profile-popup {
+      background: #2d384e;
+      color: #f2e4d8;
+    }
+
+    @keyframes pop-in {
+      0% { opacity: 0; transform: scale(0.8); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    /* Cores vibrantes extras */
+    .bg-soft-pink { background: #ffe8f0; }
+    .bg-soft-mint { background: #e0f3e8; }
+    .bg-soft-lavender { background: #ede2f7; }
+    .text-gradient { background: linear-gradient(145deg, #f2723c, #c44536); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+    /* Switch tema escuro */
+    .switch { position: relative; display: inline-block; width: 48px; height: 24px; }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .3s; border-radius: 34px; }
+    .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .3s; border-radius: 50%; }
+    input:checked + .slider { background-color: #f39c12; }
+    input:checked + .slider:before { transform: translateX(24px); }
+  </style>
+</head>
+<body>
+<div class="phone-frame">
+  <!-- Cabeçalho com a logo exata -->
+  <div class="app-header">
+    <div class="logo-container">
+      <div class="logo-main">BIPMATCH</div>
+      <div class="logo-sub">CONEXÕES REAIS PARA PESSOAS REAIS</div>
+    </div>
+    <div class="points-badge" id="globalPointsDisplay">
+      <i class="fas fa-star"></i>
+      <span id="userTotalPoints">230</span>
+    </div>
+  </div>
+
+  <!-- Conteúdo -->
+  <div class="main-content" id="mainContent">
+    <!-- HOME -->
+    <div id="homeScreen" class="screen active-screen">
+      <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
+        <h3 style="font-weight:700;">🔥 Missões diárias</h3>
+        <i class="fas fa-sliders-h" id="filterIcon" style="font-size:1.4rem; color:#d15e2e; cursor:pointer;"></i>
+      </div>
+      <div id="missionsContainer"></div>
+      
+      <!-- Painel de filtros (escondido) -->
+      <div id="filterPanel" class="filter-modal" style="display:none;"></div>
+
+      <div class="section-title"><h3>✨ Recomendados</h3></div>
+      <div id="recommendationsContainer"></div>
+    </div>
+
+    <!-- PERFIL -->
+    <div id="profileScreen" class="screen">
+      <div style="display:flex; align-items:center; gap:16px; margin:10px 0 20px;">
+        <div style="width:80px; height:80px; background:linear-gradient(145deg, #febc8d, #f78e5e); border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-size:42px;"><i class="fas fa-user-circle"></i></div>
+        <div><h2 style="font-weight:700;">Helena</h2><p>Alphaville, Barueri</p></div>
+        <i class="fas fa-pen" style="margin-left:auto; color:#c96d3a;"></i>
+      </div>
+      <div style="display:flex; gap:28px; margin:10px 0;">
+        <div><span style="font-weight:700; font-size:1.4rem;" id="profilePoints">230</span> pts</div>
+        <div><span style="font-weight:700;">8</span> missões</div>
+      </div>
+      <div class="bio-card" style="background:white; border-radius:24px; padding:18px; border:1px solid #ffd5c0;">
+        <p>📝 Apaixonada por livros, cultura coreana e boa comida.</p>
+      </div>
+      <!-- Toggle tema escuro -->
+      <div style="margin: 20px 0; display:flex; align-items:center; gap:16px;">
+        <i class="fas fa-moon"></i> <span>Tema escuro</span>
+        <label class="switch">
+          <input type="checkbox" id="darkModeToggle"> <span class="slider round"></span>
+        </label>
+      </div>
+      <h4>🏅 Histórico de missões</h4>
+      <ul id="missionHistoryLog" style="list-style:none;"></ul>
+    </div>
+
+    <!-- LOCAIS -->
+    <div id="placesScreen" class="screen">
+      <h3>🍕 Parceiros</h3>
+      <div style="background:white; border-radius:28px; padding:16px; margin-bottom:16px; border:1px solid #ffd7c0;"><strong>Larezzo Pizzaria</strong><p>Barueri · 4.1★</p></div>
+      <div style="background:white; border-radius:28px; padding:16px; margin-bottom:20px; border:1px solid #ffd7c0;"><strong>Parque Dom José</strong><p>Barueri · 4.5★</p></div>
+      <h4>🎉 Eventos especiais</h4>
+      <div style="display:flex; gap:14px; overflow-x:auto; padding-bottom:12px;">
+        <div class="event-card" style="min-width:170px; background:#ffe4f0; border-radius:28px; padding:18px;"><i class="fas fa-music"></i> <strong>Rock in Rio</strong><p>5000 pts = desconto casal</p></div>
+        <div class="event-card" style="min-width:170px; background:#d9eff5; border-radius:28px; padding:18px;"><i class="fas fa-book"></i> <strong>Bienal</strong><p>3000 pts = ingresso extra</p></div>
+        <div class="event-card" style="min-width:170px; background:#f9efcf; border-radius:28px; padding:18px;"><i class="fas fa-drumstick-bite"></i> <strong>Feira Coreana</strong><p>2000 pts = brinde</p></div>
+      </div>
+    </div>
+
+    <!-- CHAT -->
+    <div id="chatScreen" class="screen">
+      <h3>💬 Conversas</h3>
+      <div id="chatListContainer"></div>
+      <div id="chatDetailPanel" style="display:none;"></div>
+    </div>
+
+    <!-- MAPA -->
+    <div id="mapScreen" class="screen">
+      <h3>🗺️ Pessoas em Barueri</h3>
+      <div class="map-wrapper" id="mapWrapper">
+        <iframe class="map-iframe" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d58528.26849483853!2d-46.91790647910156!3d-23.50853129999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94cf03c6a1b7f5b1%3A0x1e8b9c6e6a6b6f1!2sBarueri%2C%20SP!5e0!3m2!1spt-BR!2sbr!4v1710000000000" allowfullscreen loading="lazy"></iframe>
+        <!-- Marcadores de usuários -->
+        <div class="map-marker" style="top:35%; left:25%;" data-user="Mariana"><i class="fas fa-user-circle"></i></div>
+        <div class="map-marker" style="top:55%; left:60%;" data-user="Pedro"><i class="fas fa-user-circle"></i></div>
+        <div class="map-marker" style="top:20%; left:75%;" data-user="Júlia"><i class="fas fa-user-circle"></i></div>
+        <div id="popupProfile" class="profile-popup"></div>
+      </div>
+      <p style="margin-top:8px; color:#8f6e58;">Toque nos ícones para ver o perfil.</p>
+    </div>
+  </div>
+
+  <!-- Barra inferior -->
+  <div class="bottom-nav">
+    <button class="nav-item active" data-screen="home"><i class="fas fa-home"></i><span>Home</span></button>
+    <button class="nav-item" data-screen="profile"><i class="fas fa-user"></i><span>Perfil</span></button>
+    <button class="nav-item" data-screen="places"><i class="fas fa-map-pin"></i><span>Locais</span></button>
+    <button class="nav-item" data-screen="chat"><i class="fas fa-comment"></i><span>Chat</span></button>
+    <button class="nav-item" data-screen="map"><i class="fas fa-map"></i><span>Mapa</span></button>
+  </div>
+</div>
+
+<script>
+  (function(){
+    // Estado
+    let userPoints = 230;
+    const missions = [
+      { id: 1, title: 'Fale com alguém no chat', desc: '+20 pontos', icon: 'fa-comment-dots', points: 20, completed: false },
+      { id: 2, title: 'Curta o perfil de um usuário', desc: '+10 pontos', icon: 'fa-heart', points: 10, completed: true }
+    ];
+    const chats = [
+      { name: 'Marina', lastMsg: 'Vamos na Larezzo? 🍕', messages: ['Oi! Tudo bem?', 'Bora na pizzaria hoje?'] },
+      { name: 'Pedro', lastMsg: 'Adorei o parque! 🌳', messages: ['O parque estava lindo', 'Vamos repetir no domingo?'] },
+      { name: 'Bia', lastMsg: 'Missão concluída ✅', messages: ['Ganhei +10 pontos!', 'Você já completou as missões?'] }
+    ];
+    const recommendations = [
+      { name: 'Amanda', age: 27, icon: 'fa-user-circle' },
+      { name: 'Rafael', age: 30, icon: 'fa-user-circle' },
+      { name: 'Sofia', age: 24, icon: 'fa-user-circle' }
+    ];
+
+    // Elementos
+    const screens = {
+      home: document.getElementById('homeScreen'),
+      profile: document.getElementById('profileScreen'),
+      places: document.getElementById('placesScreen'),
+      chat: document.getElementById('chatScreen'),
+      map: document.getElementById('mapScreen')
+    };
+    const navItems = document.querySelectorAll('.nav-item');
+    const pointsSpans = {
+      global: document.getElementById('userTotalPoints'),
+      profile: document.getElementById('profilePoints')
+    };
+    const missionsContainer = document.getElementById('missionsContainer');
+    const historyLog = document.getElementById('missionHistoryLog');
+    const chatListContainer = document.getElementById('chatListContainer');
+    const chatDetail = document.getElementById('chatDetailPanel');
+    const filterIcon = document.getElementById('filterIcon');
+    const filterPanel = document.getElementById('filterPanel');
+    const recContainer = document.getElementById('recommendationsContainer');
+    const darkToggle = document.getElementById('darkModeToggle');
+    const popupProfile = document.getElementById('popupProfile');
+
+    // Atualizar UI pontos
+    function updatePointsUI(animate = true) {
+      pointsSpans.global.textContent = userPoints;
+      if(pointsSpans.profile) pointsSpans.profile.textContent = userPoints;
+      if(animate) {
+        const badge = document.querySelector('.points-badge');
+        badge.classList.add('pop');
+        setTimeout(() => badge.classList.remove('pop'), 200);
+      }
+    }
+
+    // Missões
+    function renderMissions() {
+      missionsContainer.innerHTML = missions.map(m => `
+        <div class="mission-card">
+          <div style="display:flex; align-items:center; gap:16px;">
+            <div style="width:52px; height:52px; background:#fcd9c1; border-radius:18px; display:flex; align-items:center; justify-content:center; color:#b44d1e;"><i class="fas ${m.icon} fa-lg"></i></div>
+            <div><h4>${m.title}</h4><p style="color:#a5623e;">${m.desc}</p></div>
+          </div>
+          <button class="mission-btn ${m.completed ? 'completed' : ''}" data-id="${m.id}">${m.completed ? 'Concluída' : 'Concluir'}</button>
+        </div>
+      `).join('');
+      document.querySelectorAll('.mission-btn[data-id]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const id = parseInt(btn.dataset.id);
+          const mission = missions.find(m=>m.id===id);
+          if(mission && !mission.completed) {
+            mission.completed = true;
+            userPoints += mission.points;
+            updatePointsUI(true);
+            renderMissions();
+            renderHistory();
+          }
+        });
+      });
+    }
+
+    function renderHistory() {
+      const completed = missions.filter(m=>m.completed);
+      historyLog.innerHTML = completed.map(m => `<li style="padding:12px 0; border-bottom:1px solid #eccdbd;"><i class="fas ${m.icon}"></i> ${m.title} · +${m.points} pts</li>`).join('');
+    }
+
+    // Recomendações
+    function renderRecommendations() {
+      recContainer.innerHTML = recommendations.map(r => `
+        <div style="background:white; border-radius:24px; padding:16px; margin-bottom:12px; display:flex; gap:14px; align-items:center; border:1px solid #ffd8c2;">
+          <div style="width:52px; height:52px; background:#facbad; border-radius:30px; display:flex; align-items:center; justify-content:center; font-size:28px; color:#9b4e26;"><i class="fas ${r.icon}"></i></div>
+          <div><strong>${r.name}, ${r.age}</strong><p>Barueri · interesses similares</p></div>
+        </div>
+      `).join('');
+    }
+
+    // Chat
+    function renderChatList() {
+      chatListContainer.innerHTML = chats.map((c,idx) => `
+        <div class="chat-row" data-chat-index="${idx}" style="display:flex; align-items:center; gap:16px; padding:16px 8px; border-bottom:1px solid #f1d2c0; cursor:pointer;">
+          <div style="width:52px; height:52px; background:#f2c1a4; border-radius:30px; display:flex; align-items:center; justify-content:center;"><i class="fas fa-user-circle fa-2x"></i></div>
+          <div style="flex:1"><strong>${c.name}</strong><p>${c.lastMsg}</p></div>
+          <i class="fas fa-chevron-right"></i>
+        </div>
+      `).join('');
+      document.querySelectorAll('.chat-row').forEach(row => {
+        row.addEventListener('click', () => {
+          const idx = row.dataset.chatIndex;
+          const chat = chats[idx];
+          chatDetail.style.display = 'block';
+          chatDetail.innerHTML = `<div style="background:#f5e4d8; border-radius:28px; padding:18px;"><strong>${chat.name}</strong><hr style="margin:12px 0;">` +
+            chat.messages.map(msg => `<div style="background:white; padding:12px 16px; border-radius:24px; margin:10px 0;">${msg}</div>`).join('') +
+            `<button id="backChat" style="margin-top:16px; background:none; border:none; color:#c05a2a; font-weight:600;"><i class="fas fa-arrow-left"></i> Voltar</button></div>`;
+          document.getElementById('backChat').addEventListener('click', ()=> chatDetail.style.display='none');
+        });
+      });
+    }
+
+    // Filtros
+    function buildFilterPanel() {
+      filterPanel.innerHTML = `
+        <h4 style="margin-bottom:16px;">🔍 Filtrar pessoas</h4>
+        <label>Gênero:</label>
+        <select id="filterGender" style="padding:10px; border-radius:30px; width:100%; margin:8px 0 16px; border:1px solid #f0b69a;">
+          <option>Todos</option><option>Homem</option><option>Mulher</option><option>Outro</option>
+        </select>
+        <label><input type="checkbox" id="filterNearby"> Próximos a mim</label>
+        <label style="display:block; margin:16px 0 8px;">Preferências:</label>
+        <select id="filterP
